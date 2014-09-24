@@ -1,0 +1,34 @@
+# Maintainer: Konstantin Stepanov <me@kstep.me>
+pkgname="python2-pushybullet"
+_gitname="pushbullet.py"
+pkgver="0.5"
+pkgrel=0
+pkgdesc="PushBullet APIv2 python bindings"
+arch=('any')
+url="https://github.com/randomchars/pushbullet.py"
+license=('GPL')
+depends=('python2' 'python2-requests' 'python2-magic' 'python2-websocket-client')
+optdepends=(
+            'python2-dateutil: parse datetime in string format'
+            )
+source=("git+https://github.com/randomchars/pushbullet.py")
+md5sums=('SKIP')
+
+build() {
+    echo "$srcdir"
+    echo "$_gitname"
+    cd "$srcdir"/"$_gitname"
+    pwd
+    ls
+    python2 ./setup.py build
+}
+
+package() {
+    cd "$srcdir"/"$_gitname"
+    python2 ./setup.py install --root="$pkgdir" --skip-build --optimize=1
+
+    find "$pkgdir" -name "*.py" -exec \
+      sed -i '1s|env python|env python2|' {} \;
+    
+}
+
